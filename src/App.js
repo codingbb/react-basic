@@ -9,6 +9,7 @@ class App extends Component {
     super(props);
     this.state = {
       mode: "welcome",
+      selected_id: 2,
       welcome: {
         title: "Welcome",
         desc: "Welcome to FrontEnd",
@@ -43,8 +44,15 @@ class App extends Component {
       _title = this.state.welcome.title;
       _desc = this.state.welcome.desc;
     } else if (this.state.mode === "read") {
-      _title = this.state.menus[0].title;
-      _desc = this.state.menus[0].desc;
+      // menus 안에 있는 걸 item으로 받음
+      let idx = this.state.menus.findIndex(
+        (item) => item.id === this.state.selected_id
+      );
+      let data = this.state.menus[idx];
+      console.log(data);
+      _title = data.title;
+      _desc = data.desc;
+      // console.log(idx);
     }
 
     return (
@@ -58,7 +66,13 @@ class App extends Component {
             this.setState({ mode: "welcome" });
           }}
         ></Myheader>
-        <Mynav data={this.state.menus}></Mynav>
+        <Mynav
+          data={this.state.menus}
+          onChangePage={(id) => {
+            // debugger;
+            this.setState({ mode: "read", selected_id: id });
+          }}
+        ></Mynav>
         <Myarticle title={_title} desc={_desc}></Myarticle>
       </div>
     );
