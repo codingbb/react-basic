@@ -5,8 +5,8 @@ class Myarticle extends Component {
     return (
       <section>
         <article>
-          <h2>Welcome</h2>
-          <p>Welcome to FrontEnd</p>
+          <h2>{this.props.title}</h2>
+          <p>{this.props.desc}</p>
         </article>
       </section>
     );

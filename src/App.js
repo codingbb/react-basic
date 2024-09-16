@@ -8,6 +8,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      mode: "welcome",
+      welcome: {
+        title: "Welcome",
+        desc: "Welcome to FrontEnd",
+      },
       subject: {
         title: "프론트엔드 개발자",
         desc: "기본언어인 html, css, javascript부터 학습합니다.",
@@ -32,15 +37,29 @@ class App extends Component {
     };
   }
   render() {
+    let _title,
+      _desc = null;
+    if (this.state.mode === "welcome") {
+      _title = this.state.welcome.title;
+      _desc = this.state.welcome.desc;
+    } else if (this.state.mode === "read") {
+      _title = this.state.menus[0].title;
+      _desc = this.state.menus[0].desc;
+    }
+
     return (
       <div className="App">
         {/* <Myheader /> 이렇게 사용도 가능 */}
         <Myheader
           title={this.state.subject.title}
           desc={this.state.subject.desc}
+          // 함수를 자식에게 넘김
+          onChangeMode={() => {
+            this.setState({ mode: "welcome" });
+          }}
         ></Myheader>
         <Mynav data={this.state.menus}></Mynav>
-        <Myarticle></Myarticle>
+        <Myarticle title={_title} desc={_desc}></Myarticle>
       </div>
     );
   }

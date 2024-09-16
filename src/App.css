@@ -36,6 +36,7 @@ header:after {
 }
 .logo a {
   cursor: pointer;
+  font-size: 2em;
 }
 nav ul {
   padding: 0;
