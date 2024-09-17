@@ -3,10 +3,12 @@ import React, { Component } from "react";
 import Myheader from "./component/Myheader";
 import Myarticle from "./component/Myarticle";
 import Mynav from "./component/Mynav";
+import CreateArticle from "./component/CreateArticle";
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.max_menu_id = 3;
     this.state = {
       mode: "welcome",
       selected_id: 2,
@@ -39,10 +41,22 @@ class App extends Component {
   }
   render() {
     let _title,
-      _desc = null;
+      _desc,
+      _article = null;
+
+    // welcome 모드인 경우
     if (this.state.mode === "welcome") {
       _title = this.state.welcome.title;
       _desc = this.state.welcome.desc;
+      _article = (
+        <Myarticle
+          title={_title}
+          desc={_desc}
+          mode={this.state.mode}
+        ></Myarticle>
+      );
+
+      // read 모드인 경우
     } else if (this.state.mode === "read") {
       // menus 안에 있는 걸 item으로 받음
       let idx = this.state.menus.findIndex(
@@ -53,6 +67,37 @@ class App extends Component {
       _title = data.title;
       _desc = data.desc;
       // console.log(idx);
+      _article = (
+        <Myarticle
+          title={_title}
+          desc={_desc}
+          onChangeMode={(_mode) => {
+            this.setState({
+              mode: _mode,
+            });
+          }}
+        ></Myarticle>
+      );
+
+      // crate 모드인 경우
+    } else if (this.state.mode === "create") {
+      _article = (
+        <CreateArticle
+          onSubmit={(_title, _desc) => {
+            // console.log(_title, _desc);
+            this.max_menu_id += 1;
+
+            let _menus = this.state.menus.concat({
+              id: this.max_menu_id,
+              title: _title,
+              desc: _desc,
+            });
+            this.setState({
+              menus: _menus,
+            });
+          }}
+        ></CreateArticle>
+      );
     }
 
     return (
@@ -73,7 +118,31 @@ class App extends Component {
             this.setState({ mode: "read", selected_id: id });
           }}
         ></Mynav>
-        <Myarticle title={_title} desc={_desc}></Myarticle>
+        {/* <Myarticle
+          title={_title}
+          desc={_desc}
+          mode={this.state.mode}
+          onChangeMode={(_mode) => {
+            this.setState({
+              mode: _mode,
+            });
+          }}
+        ></Myarticle> */}
+        {_article}
+        <hr />
+        <div className="menu">
+          <button
+            type="button"
+            className="primary"
+            onClick={() => {
+              this.setState({
+                mode: "create",
+              });
+            }}
+          >
+            Create task
+          </button>
+        </div>
       </div>
     );
   }
