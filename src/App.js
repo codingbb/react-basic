@@ -18,7 +18,7 @@ class App extends Component {
         desc: "Welcome to FrontEnd",
       },
       subject: {
-        title: "프론트엔드 개발자",
+        title: "프론트엔드 개발자 역량",
         desc: "기본언어인 html, css, javascript부터 학습합니다.",
       },
       menus: [
@@ -76,9 +76,28 @@ class App extends Component {
           title={_data.title}
           desc={_data.desc}
           onChangeMode={(_mode) => {
-            this.setState({
-              mode: _mode,
-            });
+            if (_mode === "delete") {
+              if (window.confirm("정말 삭제할까요?")) {
+                // 배열을 새로 만들어서 _menus에 담는다 (원본을 건드리지 않기 위해서)
+                let _menus = Array.from(this.state.menus);
+                // 복사본의 하나하나의 아이템을 item으로 받아서 id랑 일치하는 것을 찾는다
+                let idx = _menus.findIndex(
+                  (item) => item.id === this.state.selected_id
+                );
+                console.log("idx ", idx);
+                // 이제 복사본에서 찾은 idx를 삭제한다
+                _menus.splice(idx, 1);
+                // 원본에 복사본을 넣어준다
+                this.setState({
+                  mode: "welcome",
+                  menus: _menus,
+                });
+              }
+            } else {
+              this.setState({
+                mode: _mode,
+              });
+            }
           }}
         ></Myarticle>
       );
